@@ -48,6 +48,10 @@
             android:name="com.ws.ku.busku.SelectionActivity"
             android:label="@string/title_activity_selection" >
         </activity>
+        <activity
+            android:name="com.ws.ku.busku.Bus"
+            android:label="@string/title_activity_bus" >
+        </activity>
     </application>
 
 </manifest>
