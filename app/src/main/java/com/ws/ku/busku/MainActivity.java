@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -27,7 +28,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class MainActivity extends FragmentActivity{
+public class MainActivity extends FragmentActivity implements OnMarkerClickListener{
     private final String ALL_LINE = "All Line";
     private final String LINE_1 = "Line 1";
     private final String LINE_2 = "Line 2";
@@ -48,6 +49,7 @@ public class MainActivity extends FragmentActivity{
     private Spinner lineSpinner;
     private Button curPosBtn;
     private LatLng curPos;
+    private Button selBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +63,7 @@ public class MainActivity extends FragmentActivity{
             @Override
             public void run() {
                 System.out.println("fuck");
-                new Requesttask(mMap, markers).execute("http://10.2.14.60:8080/busesposition");
+                new Requesttask(mMap, markers).execute("http://183.89.96.85:8080/busesposition");
             }
         };
         try {
@@ -77,12 +79,15 @@ public class MainActivity extends FragmentActivity{
     }
 
     private void addComponent(){
+        selBtn = (Button)findViewById(R.id.select_button);
         lineSpinner = (Spinner)findViewById(R.id.bus_line_spinner);
-        curPosBtn = (Button)findViewById(R.id.curPosBtn);
+        curPosBtn = (Button)findViewById(R.id.current_location_button);
+
         addBusLineToSpinner();
         setCurPosBtn();
         Toast.makeText(getApplicationContext(), "Add Busline Already", Toast.LENGTH_SHORT).show();
     }
+
 
     private void addBusLineToSpinner()
     {
@@ -169,10 +174,17 @@ public class MainActivity extends FragmentActivity{
                 setUpMap();
             }
         }
+        mMap.setOnMarkerClickListener(this);
     }
 
     public void moveToCurrent(){
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curPos, 15));
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        Toast.makeText(getApplicationContext(), "clicked eiei", Toast.LENGTH_SHORT).show();
+        return true;
     }
 
     LocationListener listener = new LocationListener() {
